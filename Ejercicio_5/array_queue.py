@@ -23,7 +23,7 @@ from exceptions import empty
 
 class ArrayQueue:
   """FIFO queue implementation using a Python list as underlying storage."""
-  DEFAULT_CAPACITY = 10          # moderate capacity for all new queues
+  DEFAULT_CAPACITY = 100        # moderate capacity for all new queues
 
   def __str__(self):
     s = ''
@@ -51,7 +51,8 @@ class ArrayQueue:
     Raise Empty exception if the queue is empty.
     """
     if self.is_empty():
-      raise Empty('Queue is empty')
+      # raise empty.Empty('Queue is empty')
+      return print("Is Empty")
     return self._data[self._front]
 
   def dequeue(self):
@@ -59,7 +60,8 @@ class ArrayQueue:
     Raise Empty exception if the queue is empty.
     """
     if self.is_empty():
-      raise Empty('Queue is empty')
+      # raise empty.Empty('Queue is empty')
+      return print("Is Empty")
     answer = self._data[self._front]
     self._data[self._front] = None         # help garbage collection
     self._front = (self._front + 1) % len(self._data)

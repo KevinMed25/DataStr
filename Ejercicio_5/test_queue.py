@@ -1,6 +1,5 @@
 import array_queue as queue
 
-
 Q = queue.ArrayQueue()              # contents: [ ]
 Q.enqueue(5) 
 print(Q)                       # contents: [5]
