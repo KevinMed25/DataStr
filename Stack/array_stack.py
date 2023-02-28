@@ -34,7 +34,7 @@ class ArrayStack:
     s=''
     for i in self._data:
       s += ' ' + str(i)
-    s = s[::-1].strip()
+    s = s[::-1].strip(git )
     return f"El contenido de la pila es: \n {s}"
 
   def __len__(self):
