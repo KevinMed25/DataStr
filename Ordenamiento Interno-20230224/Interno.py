@@ -77,7 +77,7 @@ class MetodosInterno:
                 i+=1
             else:
                 lista.append(l2[j])
-                j+=1
+                j+=1 
             if i==n1: #La lista l1 se quedó sin elementos
                 lista.extend(l2[j:])
                 break
