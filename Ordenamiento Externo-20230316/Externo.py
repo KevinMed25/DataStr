@@ -9,13 +9,13 @@ class MetodosExterno:
         f2 = abrir_archivo(ruta_f2,'r')
         f3 = abrir_archivo(ruta,'w')
         r1 = f1.readline()
-        if r1 != '':b1=False
+        if r1 != '': b1=False
         r2 = f2.readline()
         if r2 != '':b2=False
         while (r1!='' or not b1) and (r2!='' or not b2):
             k=0
             l=0
-            while (k < part and not b1 and l < part and not b2):
+            while ((k < part and not b1) and (l < part and not b2)):
                 if int(r1) <= int(r2):
                     if r1[-1]!='\n':r1+='\n'
                     f3.write(r1)
