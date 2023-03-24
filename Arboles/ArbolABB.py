@@ -25,17 +25,19 @@ class ArbolABB:
                 self.__inserta_ordenado(nodo.der,dato)
     def insertar(self, dato):
         self.__inserta_ordenado(self.raiz,dato)
-    def __buscar(self, nodo:NodoBin, dato)->NodoBin:
+
+    def __buscar(self, nodo:NodoBin, padre:NodoBin, dato)->tuple:
         if int(dato)<int(nodo.dato):
-            if nodo.izq is None: return None
-            else: return self.__buscar(nodo.izq,dato)
+            if nodo.izq is None: return None,None
+            else: 
+                return self.__buscar(nodo.izq,nodo,dato)
         elif int(dato)>int(nodo.dato):
-            if nodo.der is None: return None
-            else: return self.__buscar(nodo.der, dato)
+            if nodo.der is None: return None,None
+            else: return self.__buscar(nodo.der, nodo,dato)
         else:
-            return nodo
+            return nodo,padre
     def buscar(self,nodo,dato):
-        return self.__buscar(nodo,dato)
+        return self.__buscar(nodo,None,dato)
     def __buscar_minimo(self, nodo:NodoBin)->NodoBin:
         while nodo.izq is not None:
             nodo = nodo.izq
@@ -47,8 +49,10 @@ class ArbolABB:
         else: return nodo.der
     
     def __borrar(self, nodo:NodoBin,dato):
-        n = self.__buscar(nodo,dato)
-        if n is None: print('Elemento no encontrado')
+        n,padre = self.buscar(nodo,dato)
+        if n is None: 
+            print('Elemento no encontrado')
+            return None
         else:
             if n.der != None and n.izq != None:
                 #Se aplica el criterio de eliminación con 2 hijos
@@ -57,10 +61,17 @@ class ArbolABB:
                 n.dato = minimo.dato
                 n.der = self.__borrar_minimo(n.der)
             else:
-                n = n.izq if n.izq is None else n.der
-        return n
+                if n.izq is None: 
+                    n = n.der
+                else:
+                    n = n.izq
+                if padre.izq.dato == dato:
+                    padre.izq = n
+                elif padre.der.dato ==dato:
+                    padre.der = n
+        return dato
     def borrar(self, dato):
-        self.__borrar(self.raiz,dato)
+        return self.__borrar(self.raiz,dato)
 
 if __name__=='__main__':
     arbol = ArbolABB(120)
@@ -74,14 +85,13 @@ if __name__=='__main__':
     arbol.insertar(93)
     arbol.insertar(135)
     arbol.insertar(56)
-    arbol.insertar(95)
+    arbol.insertar(92)
     print("RECORRIDO EN INORDEN")
     arbol.inorden()
-    x = arbol.buscar(arbol.raiz,578)
-    if x is None: print('No se encontró')
-    else: print(x.dato)
-    eliminado = 548
-    print ('Eliminado el elemento:',eliminado)
-    arbol.borrar(eliminado)
+    encontrado, padre = arbol.buscar(arbol.raiz,536)
+    if encontrado is None: print('No se encontró')
+    else: print('Localizado: ',encontrado.dato)
+    eliminado = 93
+    print('Eliminado:',arbol.borrar(eliminado))
     arbol.inorden()
 
