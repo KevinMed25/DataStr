@@ -70,6 +70,7 @@ class ArbolABB:
                 elif padre.der.dato ==dato:
                     padre.der = n
         return dato
+    
     def borrar(self, dato):
         return self.__borrar(self.raiz,dato)
 
