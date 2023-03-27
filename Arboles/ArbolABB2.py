@@ -1,22 +1,31 @@
 from NodoBin import *
 
 class ArbolABB:
-    
     def __init__(self, dato):
         self.__raiz = NodoBin(dato=dato)
-   
+    
     @property
+    
     def raiz(self):
         return self.__raiz
     
     @raiz.setter
+    
     def raiz(self,dato):
         self.__raiz.dato=dato
-   
+    
     def inorden(self):
         if self.raiz is not None:
             self.raiz.inorden()
-   
+
+    def preorden(self):
+        if self.raiz is not None:
+            self.raiz.preorden()
+
+    def posorden(self):
+        if self.raiz is not None:
+            self.raiz.posorden()
+    
     def __inserta_ordenado(self,nodo:NodoBin, dato):
         if int(dato)<int(nodo.dato):
             if nodo.izq is None:
@@ -46,29 +55,42 @@ class ArbolABB:
     def buscar(self,nodo,dato):
         return self.__buscar(nodo,None,dato)
     
+    """ 
+    MÉTODO PARA BUSCAR EL ELEMENTO MÁS PEQUEÑO (nodos a la izquierda) EN EL NODO DERECHO
+
     def __buscar_minimo(self, nodo:NodoBin)->NodoBin:
         while nodo.izq is not None:
             nodo = nodo.izq
-        return nodo
+        return nodo """
     
-    def __buscar_maximo(self, nodo:NodoBin)->NodoBin:
+    # Método añadido
+    """ Método que busca el elemento más grande (nodos a la derecha) del subárbol izquierdo """
+    def __buscar_max(self, nodo:NodoBin)->NodoBin:
         while nodo.der is not None:
             nodo = nodo.der
         return nodo
+    
+    # Método añadido
+    """ Método que borra el elemento más grande del nodo izquierdo """
+    def __borrar_max(self, nodo:NodoBin)->NodoBin:
+        if nodo.der is not None:
+            nodo.der = self.__borrar_max(nodo.der)
+            return nodo
+        else: return nodo.izq
+    
+    """
+    MÉTODO PARA BORRAR EL ELEMENTO MÁS PEQUEÑO DEL NODO DERECHO
     
     def __borrar_minimo(self, nodo:NodoBin)->NodoBin:
         if nodo.izq is not None:
             nodo.izq = self.__borrar_minimo(nodo.izq)
             return nodo
-        else: return nodo.der
-
-    def __borrar_maximo(self, nodo:NodoBin)->NodoBin:
-        if nodo.der is not None:
-            nodo.der = self.__borrar_maximo(nodo.der)
-            return nodo
-        else: return nodo.izq
+        else: return nodo.der """
     
-    def __borrarDerecha(self, nodo:NodoBin,dato):
+    """ 
+    MÉTODO QUE USA EL ELEMENTO MÁS PEQUEÑO DEL SUBÁRBOL DERECHO
+
+    def __borrar(self, nodo:NodoBin,dato):
         n,padre = self.buscar(nodo,dato)
         if n is None: 
             print('Elemento no encontrado')
@@ -89,37 +111,36 @@ class ArbolABB:
                     padre.izq = n
                 elif padre.der.dato ==dato:
                     padre.der = n
-        return dato
+        return dato """
     
-    def __borrarIzquierda(self, nodo:NodoBin,dato):
-        n,padre = self.buscar(nodo,dato)
-        if n is None: 
-            print('Elemento no encontrado')
+    # Método añadido
+    """Método que borra el elemento más grande del subárbol izquierdo """
+    def __borrar(self, nodo: NodoBin, dato):
+        n, padre = self.buscar(nodo, dato)
+        if n is None:
+            print("Elemento no encontrado")
             return None
         else:
             if n.der != None and n.izq != None:
-                #Se aplica el criterio de eliminación con 2 hijos
-                #Buscar el elemento más grande en el subárbol izquierdo
-                maximo = self.__buscar_maximo(n.izq)
+                # Buscar el elemento más grande en el subárbol izquierdo
+                maximo = self.__buscar_max(n.izq)
                 n.dato = maximo.dato
-                n.izq = self.__borrar_maximo(n.izq)
+                n.izq = self.__borrar_max(n.izq)
             else:
-                if n.der is None: 
+                if n.der is None:
                     n = n.izq
                 else:
                     n = n.der
-                if padre.izq.dato == dato:
-                    padre.izq = n
-                elif padre.der.dato ==dato:
+        
+                if padre != None and padre.der != None and padre.der.dato == dato:
                     padre.der = n
-                    
-        return dato
+                elif padre != None and padre.izq != None and padre.izq.dato == dato:
+                    padre.izq = n
+            return dato
+
     
-    def borrarDerecha(self, dato):
-        return self.__borrarDerecha(self.raiz,dato)
-    
-    def borrarIzquierda(self, dato):
-        return self.__borrarIzquierda(self.raiz,dato)
+    def borrar(self, dato):
+        return self.__borrar(self.raiz,dato)
 
 if __name__=='__main__':
     arbol = ArbolABB(120)
@@ -134,12 +155,30 @@ if __name__=='__main__':
     arbol.insertar(135)
     arbol.insertar(56)
     arbol.insertar(92)
-    print("RECORRIDO EN INORDEN")
-    arbol.inorden()
-    encontrado, padre = arbol.buscar(arbol.raiz,536)
-    if encontrado is None: print('No se encontró')
-    else: print('Localizado: ',encontrado.dato)
-    eliminado = 93
-    print('Eliminado:',arbol.borrarIzquierda(eliminado))
-    arbol.inorden()
 
+print("RECORRIDO EN INORDEN")
+arbol.inorden()
+encontrado, padre = arbol.buscar(arbol.raiz,536)
+if encontrado is None: print('No se encontró')
+else: print('Localizado: ',encontrado.dato)
+eliminado = 93
+print('Eliminado:',arbol.borrar(eliminado))
+arbol.inorden()
+
+""" print("RECORRIDO EN PREORDEN")
+arbol.preorden()
+encontrado, padre = arbol.buscar(arbol.raiz,56)
+if encontrado is None: print("No se encontró")
+else: print("Localizado: ", encontrado.dato)
+eliminado = 65
+print ("Eliminado: ", arbol.borrar(eliminado))
+arbol.preorden() """
+
+""" print("RECORRIDO EN POSORDEN")
+arbol.posorden()
+encontrado, padre = arbol.buscar(arbol.raiz,24)
+if encontrado is None: print ("No se encontró")
+else: print("Localizado: ", encontrado.dato)
+eliminado = 22
+print ("Eliminado: ", arbol.borrar(eliminado))
+arbol.posorden() """
