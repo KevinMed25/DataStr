@@ -8,18 +8,23 @@ class NodoAVL:
         self.__padre = padre
         self.__f_eq = f_eq
     
+    #Para Dato
     @property
     def dato(self):
         return self.__dato
     @dato.setter
     def dato(self, dato):
         self.__dato = dato
+
+    #Hijo Izquierdo
     @property
     def izq(self):
         return self.__izq
     @izq.setter
     def izq(self, izq):
         self.__izq=izq
+    
+    #Hijo Derecho
     @property
     def der(self):
         return self.__der
@@ -27,6 +32,7 @@ class NodoAVL:
     def der(self, der):
         self.__der=der
 
+    #Factor de equilibrio
     @property
     def f_eq(self):
         return self.__f_eq
@@ -34,6 +40,7 @@ class NodoAVL:
     def f_eq(self, f_eq):
         self.__f_eq = f_eq
 
+    # Padre
     @property
     def padre(self):
         return self.__padre
@@ -41,6 +48,7 @@ class NodoAVL:
     def padre(self, padre):
         self.__padre = padre
 
+    
     @staticmethod
     def altura(nodo:NodoAVL=None)->int:
         if nodo is None:
